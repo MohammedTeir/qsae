@@ -1,0 +1,10 @@
+[[permission]]
+identifier = "allow-all-commands"
+description = "Allows all custom app commands"
+commands.allow = [
+  "compress_file",
+  "decompress_file",
+  "inspect_file",
+  "analyze_file",
+  "get_quorum_data"
+]

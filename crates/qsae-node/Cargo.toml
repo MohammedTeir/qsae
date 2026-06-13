@@ -1,0 +1,22 @@
+[package]
+name = "qsae-node"
+version = "0.1.0"
+edition = "2021"
+authors = ["QSAE Team"]
+license = "MIT OR Apache-2.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+qsae-core = { path = "../qsae-core" }
+napi = { version = "2", default-features = false, features = ["napi4", "tokio_rt"] }
+napi-derive = "2"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[build-dependencies]
+napi-build = "2"
+
+[dev-dependencies]
+napi = { version = "2", default-features = false, features = ["napi4", "tokio_rt"] }

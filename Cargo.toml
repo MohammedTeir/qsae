@@ -1,0 +1,48 @@
+[workspace]
+# QSAE Workspace — all crates and apps
+# 
+# Build everything: cargo build --release
+# Build CLI only:  cargo build --release -p qsae-cli
+# Build core only: cargo build --release -p qsae-core
+# 
+# NOTE ON PROFILES:
+# [profile.release] and [profile.bench] are defined HERE in the workspace root.
+# Cargo ignores profile sections in member crates — they must be specified
+# at the workspace root to apply to all crates. If you see a warning about
+# "profiles for the non root package will be ignored", it means a member
+# crate has a [profile.*] section that Cargo is ignoring. Remove it from
+# the member and keep it here.
+members = [
+    "crates/qsae-core",
+    "crates/qsae-cli",
+    "crates/qsae-wasm",
+    "crates/qsae-python",
+    "crates/qsae-node",
+    "crates/qsae-c",
+    "apps/desktop/src-tauri",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["QSAE Team"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/qsae/qsae"
+
+[profile.release]
+# Optimized release build for all workspace members
+opt-level = 3          # Maximum optimization
+lto = "fat"            # Link-time optimization across all crates
+codegen-units = 1      # Single codegen unit for better optimization
+panic = "abort"        # Smaller binary, no unwinding
+strip = true           # Strip debug symbols
+
+[profile.bench]
+# Profile for cargo bench — optimized but with debug info
+opt-level = 3
+debug = true
+
+[workspace.dependencies]
+# Shared dependencies across workspace members
+tempfile = "3.10"

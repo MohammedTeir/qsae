@@ -1,0 +1,18 @@
+[package]
+name = "qsae-cli"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "qsae"
+path = "src/main.rs"
+
+[dependencies]
+qsae-core = { path = "../qsae-core" }
+clap = { version = "4.5", features = ["derive"] }
+indicatif = "0.17"
+console = "0.15"
+human_bytes = "0.4"
+anyhow = "1.0"

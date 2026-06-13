@@ -1,0 +1,16 @@
+[package]
+name = "qsae-c"
+version = "0.1.0"
+edition = "2021"
+authors = ["QSAE Team"]
+license = "MIT OR Apache-2.0"
+
+[lib]
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+qsae-core = { path = "../qsae-core" }
+libc = "0.2"
+
+[build-dependencies]
+cbindgen = "0.26"
