@@ -117,6 +117,22 @@ impl Dispatcher {
             prev_quorum = q;
         }
 
+            //ADD THE SANITY CHECK HERE — after the loop, before the return:
+    let bwt_count = assignments.iter().filter(|a| a.codec_id == 0x06).count();
+    if assignments.len() > 4 && bwt_count as f64 / assignments.len() as f64 > 0.9 {
+        let avg_entropy = entropies.iter().sum::<f64>() / entropies.len() as f64;
+        if avg_entropy > 6.0 {
+            // Fall back to simple routing — BWT is wrong for this data
+            let simple_assignments = self.assign_simple(blocks, data);
+            return QuorumAnalysis {
+                assignments: simple_assignments,
+                quorum_curve,
+                switch_points,
+                entropy_profile: entropies,
+            };
+        }
+    }
+
         QuorumAnalysis {
             assignments,
             quorum_curve,
@@ -132,7 +148,7 @@ impl Dispatcher {
         // High quorum signal in neighborhood suggests sustained high entropy → be conservative
         let adjusted_entropy = if quorum_signal > 6.0 {
             // High neighborhood entropy: bias toward higher-entropy codecs
-            entropy.min(7.5)
+            entropy.min(8)
         } else if quorum_signal < 2.0 {
             // Low neighborhood entropy: bias toward lower-entropy codecs
             entropy.max(0.0)

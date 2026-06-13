@@ -59,25 +59,23 @@ pub fn select_codec(entropy: f64) -> Box<dyn Codec> {
 ///
 /// Phase 3: Full codec pool with data-aware routing.
 pub fn select_codec_for_data(entropy: f64, data: &[u8]) -> Box<dyn Codec> {
-    // Priority 1: Numeric data → DeltaCodec (if data is available to inspect)
     if !data.is_empty() && delta::DeltaCodec::is_numeric(data) {
         return Box::new(delta::DeltaCodec);
     }
 
-    // Priority 2: Entropy-based routing
     if entropy < 1.0 {
         Box::new(rle::RleCodec)
     } else if entropy < 3.5 {
-        Box::new(lz4::Lz4Codec)      // Fast for structured data
+        Box::new(lz4::Lz4Codec)
     } else if entropy < 5.0 {
-        Box::new(lz77::Lz77Codec::new())   // Phase 3: Custom sliding window
+        Box::new(lz77::Lz77Codec::new())
     } else if entropy < 6.0 {
         Box::new(huffman::HuffmanCodec)
     } else if entropy < 6.5 {
-        Box::new(bwt::BwtCodec)     // Phase 3: Text-heavy data
+        Box::new(bwt::BwtCodec)
     } else if entropy < 7.5 {
-        Box::new(ans::AnsCodec)     // Phase 3: Near-theoretical compression
+        Box::new(ans::AnsCodec)
     } else {
-        Box::new(skip::SkipCodec)
+        Box::new(skip::SkipCodec)  // ← must reach here for exe blocks
     }
 }
