@@ -88,7 +88,7 @@ impl Dispatcher {
                 let trend = if i > 0 { q - prev_quorum } else { 0.0 };
                 let predicted_entropy = if trend > 0.0 {
                     // Quorum increasing → entropy regime shifting up
-                    block.entropy.min(7.5)
+                    block.entropy.min(8.0)
                 } else {
                     // Quorum decreasing → entropy regime shifting down
                     block.entropy.max(0.0)
